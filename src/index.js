@@ -395,7 +395,7 @@ module.exports = function (context) {
                                 caption: `${articleAuthorName}`,
                                 },
                             sameAs: structuredData.authors[articleAuthorName].sameAs,
-                            url: `${articleAuthorUrl}`,
+                            url: structuredData.authors[articleAuthorName].url,
                         }
                             
                     };
