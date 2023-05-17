@@ -129,7 +129,7 @@ module.exports = function (context) {
                     verbose ? console.log(`webPageUrl: ${webPageUrl}`): null;
                     const webPageTitle = dom.window.document.querySelector('title').text.replace(` ${titleDelimiter} ${orgName}`, '');
                     verbose ? console.log(`webPageTitle: ${webPageTitle}`): null;
-                    const webPageDescription = dom.window.document.head.querySelector('[name~=description][content]').content;
+                    const webPageDescription = dom.window.document.head.querySelector('[name~=description][content]')?.content ?? '';
                     verbose ? console.log(`webPageDescription: ${webPageDescription}`): null;
                     
                     // get page type and image...
