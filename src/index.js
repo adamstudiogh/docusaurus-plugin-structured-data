@@ -231,11 +231,11 @@ module.exports = function (context) {
 
                     verbose ? console.log('processing breadcrumb data...'): null;
                     
-                    let breadcrumbData = {
-                        '@type': 'BreadcrumbList',
-                        '@id': `${webPageUrl}/#breadcrumb`,
-                        itemListElement: [],
-                    };
+                    // let breadcrumbData = {
+                    //     '@type': 'BreadcrumbList',
+                    //     '@id': `${webPageUrl}/#breadcrumb`,
+                    //     itemListElement: [],
+                    // };
 
                     const routeArray = route.split('/')
                         .slice(1, -1)
@@ -253,13 +253,13 @@ module.exports = function (context) {
                             // its the home page or another root level page
                             pageName = `${webPageTitle}`;
                             if (pageName !== 'Home') {
-                                breadcrumbData.itemListElement.push(breadcrumbHomeData);
+                                // breadcrumbData.itemListElement.push(breadcrumbHomeData);
                                 elementIndex = 2;
                             }
                             break;
                         case 1:
                             // its a top level leaf page, docs or blog
-                            breadcrumbData.itemListElement.push(breadcrumbHomeData);
+                            // breadcrumbData.itemListElement.push(breadcrumbHomeData);
                             switch (routeArray[0]) {
                                 case 'docs':
                                     pageName = 'Documentation';
@@ -272,7 +272,7 @@ module.exports = function (context) {
                                         elementIndex = 2;
                                     } else {
                                         // its a blog post
-                                        breadcrumbData.itemListElement.push(breadcrumbBlogData);
+                                        // breadcrumbData.itemListElement.push(breadcrumbBlogData);
                                         pageName = `${webPageTitle}`;
                                         elementIndex = 3;
                                     }
@@ -283,10 +283,10 @@ module.exports = function (context) {
                             break;
                         default:
                             // its a nested (docs) leaf page
-                            breadcrumbData.itemListElement.push(breadcrumbHomeData);
+                            // breadcrumbData.itemListElement.push(breadcrumbHomeData);
                             switch (routeArray[0]) {
                                 case 'docs':
-                                    breadcrumbData.itemListElement.push(breadcrumbDocsData);
+                                    // breadcrumbData.itemListElement.push(breadcrumbDocsData);
                                     break;
                                 default:
                                     break;
@@ -310,12 +310,12 @@ module.exports = function (context) {
                     verbose ? console.log(`pageName: ${pageName}, elementIndex: ${elementIndex}`): null;
 
                     // push final element (the current page)
-                    let leafPageElement = {
-                        '@type': 'ListItem',
-                        position: elementIndex,
-                        name: `${pageName}`,
-                    }
-                    breadcrumbData.itemListElement.push(leafPageElement);
+                    // let leafPageElement = {
+                    //     '@type': 'ListItem',
+                    //     position: elementIndex,
+                    //     name: `${pageName}`,
+                    // }
+                    // breadcrumbData.itemListElement.push(leafPageElement);
 
                     // article related structured data
                     let articleData;
@@ -415,13 +415,13 @@ module.exports = function (context) {
                         data['@graph'].push(articleData);
                         data['@graph'].push(webPageData);
                         data['@graph'].push(imageObjectData);
-                        data['@graph'].push(breadcrumbData);
+                        // data['@graph'].push(breadcrumbData);
                         data['@graph'].push(webSiteData);
                         data['@graph'].push(orgData);
                         articleAuthorName ? data['@graph'].push(personData): null;
                     } else {
                         data['@graph'].push(webPageData);
-                        data['@graph'].push(breadcrumbData);
+                        // data['@graph'].push(breadcrumbData);
                         data['@graph'].push(webSiteData);
                         data['@graph'].push(orgData);
                     }
@@ -432,29 +432,29 @@ module.exports = function (context) {
                     script.innerHTML = JSON.stringify(data);
                     dom.window.document.head.appendChild(script);
 
-                    // find and remove breadcrumb microdata
-                    let breadcrumbMicrodata = dom.window.document.querySelector('ul[itemtype="https://schema.org/BreadcrumbList"]');
-                    if(breadcrumbMicrodata){
-                        // remove itemtype and itemscope property from node
-                        breadcrumbMicrodata.removeAttribute('itemtype');
-                        breadcrumbMicrodata.removeAttribute('itemscope');
-                    }
+                    // // find and remove breadcrumb microdata
+                    // let breadcrumbMicrodata = dom.window.document.querySelector('ul[itemtype="https://schema.org/BreadcrumbList"]');
+                    // if(breadcrumbMicrodata){
+                    //     // remove itemtype and itemscope property from node
+                    //     breadcrumbMicrodata.removeAttribute('itemtype');
+                    //     breadcrumbMicrodata.removeAttribute('itemscope');
+                    // }
 
-                    let breadcrumbListItemMicrodata = dom.window.document.querySelector('li[itemtype="https://schema.org/ListItem"]');
-                    if(breadcrumbListItemMicrodata){
-                        // remove itemtype and itemscope property from node
-                        breadcrumbListItemMicrodata.removeAttribute('itemtype');
-                        breadcrumbListItemMicrodata.removeAttribute('itemscope');
-                        breadcrumbListItemMicrodata.removeAttribute('itemprop');
-                    }
+                    // let breadcrumbListItemMicrodata = dom.window.document.querySelector('li[itemtype="https://schema.org/ListItem"]');
+                    // if(breadcrumbListItemMicrodata){
+                    //     // remove itemtype and itemscope property from node
+                    //     breadcrumbListItemMicrodata.removeAttribute('itemtype');
+                    //     breadcrumbListItemMicrodata.removeAttribute('itemscope');
+                    //     breadcrumbListItemMicrodata.removeAttribute('itemprop');
+                    // }
 
-                    // find and remove <meta itemprop="position" ..>, excess baggage with JSON-LD breadcrumb data
-                    let breadcrumbPositionMeta = dom.window.document.querySelectorAll('meta[itemprop="position"]');
-                    if(breadcrumbPositionMeta){
-                        breadcrumbPositionMeta.forEach((element) => {
-                            element.remove();
-                        });
-                    }
+                    // // find and remove <meta itemprop="position" ..>, excess baggage with JSON-LD breadcrumb data
+                    // let breadcrumbPositionMeta = dom.window.document.querySelectorAll('meta[itemprop="position"]');
+                    // if(breadcrumbPositionMeta){
+                    //     breadcrumbPositionMeta.forEach((element) => {
+                    //         element.remove();
+                    //     });
+                    // }
 
                     fs.writeFileSync(filePath, dom.serialize());
                 });
